@@ -36,12 +36,8 @@ public class ConnexionForAndroid extends HttpServlet {
             /**
              * On prepare la connexion a partir de la classe Connexion*
              */
-            String asServeur = "172.17.0.2";
-            String asPort = "3306";
-            String asBD = "leboncoin";
-            String asUser = "root";
-            String asPassword = "root";
-            Connection Cnx = Connexion.seConnecter(asServeur, asPort, asBD, asUser, asPassword);
+     
+            Connection Cnx = Connexion.seConnecter();
 
             /**
              * *On prepare notre requete**

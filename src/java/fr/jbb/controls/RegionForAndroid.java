@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject; // a importer dans les librairies http://json-simple.googlecode.com/files/json-simple-1.1.1.jar
 //https://code.google.com/archive/p/json-simple/wikis/EncodingExamples.wiki pour les exemples
+
 /**
  *
  * @author formation
@@ -39,33 +40,29 @@ public class RegionForAndroid extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setContentType("application/json;charset=UTF-8"); // on specifie que notre response sera de type json
-        
+
         PrintWriter out = response.getWriter();
         JSONObject json = new JSONObject(); //on crée un objet json
-        
+
         try {
             /**
              * On prepare la connexion a partir de la classe Connexion*
              */
-            String asServeur = "127.0.0.1";
-            String asPort = "3306";
-            String asBD = "leboncoin";
-            String asUser = "root";
-            String asPassword = "";
-            Connection Cnx = Connexion.seConnecter(asServeur, asPort, asBD, asUser, asPassword); // classe Connexion
 
+            Connection Cnx = Connexion.seConnecter(); // classe Connexion
+         
             String[] tColonnes = {"*"};
             String psTable = "VILLE"; //NOM DE LA TABLE
 
             String[][] tData; // RESULTAT
 
-            tData = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, null, null,"1", "30"); //SELECT sur le DAOGenerique
-            
+            tData = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, null, null, "1", "30"); //SELECT sur le DAOGenerique
+
             json.put("REGION", tData); // on specifie dans le premier parametre le nom et dans le deuxieme le tableau de notre requete
             out.print(json.toString()); //on convertie le tout en string
-        
+
         } catch (ClassNotFoundException ex) {
             out.print("message Error" + ex.getMessage());
 

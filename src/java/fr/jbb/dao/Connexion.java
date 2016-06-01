@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 //import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.System.out;
 import java.sql.*;
 import java.util.Properties;
 //import java.util.logging.Level;
@@ -23,57 +24,14 @@ public class Connexion {
      */
     private static Connection icnx;
 
-    /*
-     Constructeurs
-     */
-    /**
-     * Avec un fichier de properties
-     *
-     * @param psChemin
-     * @return
-     */
-    public static Connection seConnecter(String psChemin) {
+    public static Connection seConnecter() throws ClassNotFoundException {
         try {
 
-            // --- Creation d'un objet de proprietes
-            Properties applicationProps = new Properties();
-
-            // --- Lecture du fichier des proprietes
-            FileInputStream in = new FileInputStream(psChemin);
-            applicationProps.load(in);
-            in.close();
-
-            // --- Recuperation des proprietes une a une
-            String lsPilote = applicationProps.get("pilote").toString();
-
-            String lsProtocole = applicationProps.get("protocole").toString();
-            String lsServeur = applicationProps.get("serveur").toString();
-            String lsPort = applicationProps.get("port").toString();
-            String lsBD = applicationProps.get("bd").toString();
-
-            String lsUT = applicationProps.get("ut").toString();
-            String lsMDP = applicationProps.get("mdp").toString();
-
-            //String lsURL=jdbc:mysql://127.0.0.1:3306/cours
-            String lsURL = lsProtocole + "://" + lsServeur + ":" + lsPort + "/" + lsBD;
-
-            // --- Test sur une connexion et un SELECT
-            Class.forName(lsPilote);
-            icnx = DriverManager.getConnection(lsURL, lsUT, lsMDP);
-            icnx.setAutoCommit(false);
-
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-        } catch (ClassNotFoundException e) {
-            System.err.println(e.getMessage());
-        } catch (SQLException exe) {
-            System.err.println(exe.getMessage());
-        }
-        return icnx;
-    } /// seConnecter
-
-    public static Connection seConnecter(String asServeur, String asPort, String asBD, String asUser, String asPassword) throws ClassNotFoundException {
-        try {
+            String asServeur = "127.0.0.1";
+            String asPort = "48775";
+            String asBD = "leboncoin";
+            String asUser = "root";
+            String asPassword = "";
             // String lsURL="jdbc:mysql://172.17.0.2:3306/leboncoin";
             String lsURL = "jdbc:mysql://" + asServeur + ":" + asPort + "/" + asBD + "";
 
@@ -85,19 +43,12 @@ public class Connexion {
             icnx.setAutoCommit(false);
 
         } catch (SQLException ex) {
-         
+            out.println("Erreur SQL"+ex.getMessage());
             System.err.println(ex.getMessage());
         }
         return icnx;
     } /// seConnecter
 
-    /*
-     Methodes
-     */
-    /**
-     *
-     * @return
-     */
 //    public Connection getCnx() {
 //        return icnx;
 //    }
