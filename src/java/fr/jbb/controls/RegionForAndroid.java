@@ -13,6 +13,8 @@ import java.sql.Connection;
 import static java.util.Collections.list;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,38 +40,35 @@ public class RegionForAndroid extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        response.setContentType("application/json;charset=UTF-8"); // on specifie que notre response sera de type json
-
-        PrintWriter out = response.getWriter();
-        JSONObject json = new JSONObject(); //on crée un objet json
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        
+        PrintWriter out = null;
+        
         try {
-            /**
-             * On prepare la connexion a partir de la classe Connexion*
-             */
-
-            Connection Cnx = Connexion.seConnecter(); // classe Connexion
-         
+            
+            response.setContentType("application/json;charset=UTF-8"); // on specifie que notre response sera de type json
+            out = response.getWriter();
+            JSONObject json = new JSONObject(); //on crée un objet json
+            Connection Cnx = Connexion.seConnecter();
+            if (Cnx == null) {
+                json.put("Erreur", "Probleme de connexion");
+                out.print(json.toString());
+            }
             String[] tColonnes = {"*"};
-            String psTable = "VILLE"; //NOM DE LA TABLE
-
-            String[][] tData; // RESULTAT
-
-            tData = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, null, null, "1", "30"); //SELECT sur le DAOGenerique
-
-            json.put("REGION", tData); // on specifie dans le premier parametre le nom et dans le deuxieme le tableau de notre requete
-            out.print(json.toString()); //on convertie le tout en string
-
-        } catch (ClassNotFoundException ex) {
-            out.print("message Error" + ex.getMessage());
-
+            String psTable = "region";
+            String[][] tData;
+            tData = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, null, null, "1", "30");
+            json.put("REGION", tData);
+            out.print(json.toString());
+            out.close();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(RegionForAndroid.class.getName()).log(Level.SEVERE, null, ex);
+            
         } finally {
             out.close();
         }
-
+        
     }
-
+    
 }

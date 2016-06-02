@@ -10,6 +10,8 @@ import java.io.PrintWriter;
 import static java.lang.System.out;
 import java.sql.*;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 
@@ -24,14 +26,20 @@ public class Connexion {
      */
     private static Connection icnx;
 
-    public static Connection seConnecter() throws ClassNotFoundException {
+    public static Connection seConnecter() {
+
         try {
 
-            String asServeur = "127.0.0.1";
-            String asPort = "48775";
+//            String asServeur = "localhost";
+//            String asPort = "3306";
+//            String asBD = "leboncoin";
+//            String asUser = "root";
+//            String asPassword = "hellsing003";
+            String asServeur = "172.17.0.2";
+            String asPort = "3306";
             String asBD = "leboncoin";
             String asUser = "root";
-            String asPassword = "";
+            String asPassword = "root";
             // String lsURL="jdbc:mysql://172.17.0.2:3306/leboncoin";
             String lsURL = "jdbc:mysql://" + asServeur + ":" + asPort + "/" + asBD + "";
 
@@ -43,8 +51,9 @@ public class Connexion {
             icnx.setAutoCommit(false);
 
         } catch (SQLException ex) {
-            out.println("Erreur SQL"+ex.getMessage());
-            System.err.println(ex.getMessage());
+            icnx = null;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         return icnx;
     } /// seConnecter
@@ -63,7 +72,6 @@ public class Connexion {
         } catch (SQLException ex) {
             lbOK = false;
             System.err.println(ex.getMessage());
-//            Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         return lbOK;
     } /// seDeconnecter
@@ -79,7 +87,6 @@ public class Connexion {
         } catch (SQLException ex) {
             lbOK = false;
             System.err.println(ex.getMessage());
-//            Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         return lbOK;
     } /// valider
@@ -95,7 +102,6 @@ public class Connexion {
         } catch (SQLException ex) {
             lbOK = false;
             System.err.println(ex.getMessage());
-//            Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         return lbOK;
     } /// annuler
