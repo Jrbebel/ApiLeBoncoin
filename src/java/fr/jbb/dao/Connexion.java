@@ -30,16 +30,17 @@ public class Connexion {
 
         try {
 
-//            String asServeur = "localhost";
-//            String asPort = "3306";
+       
+         String asPort = "3306";
 //            String asBD = "leboncoin";
 //            String asUser = "root";
-//            String asPassword = "hellsing003";
-            String asServeur = "localhost";
-            String asPort = "3306";
+        String asServeur = "172.17.0.2";
+       //   String asServeur = "localhost";
+         //  String asPort = "3306";
             String asBD = "leboncoin";
-            String asUser = "root";
-            String asPassword = "";
+            String asUser = "root"; 
+        //  String asPassword = "hellsing003";
+                String asPassword = "root";
             // String lsURL="jdbc:mysql://172.17.0.2:3306/leboncoin";
             String lsURL = "jdbc:mysql://" + asServeur + ":" + asPort + "/" + asBD + "";
 
