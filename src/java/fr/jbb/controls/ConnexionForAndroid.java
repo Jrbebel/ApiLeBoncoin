@@ -41,8 +41,8 @@ public class ConnexionForAndroid extends HttpServlet {
         String email = request.getParameter("email");
         String mdp = request.getParameter("mdp");
 
-        String[] tColonnes = {"*"};
-        String psTable = "CLIENT";
+        String[] tColonnes = {"NOM_CLIENT,PRENOM_CLIENT,TELEPHONE_CLIENT,EMAIL_CLIENT,PSEUDO_CLIENT"};
+        String psTable = "client";
 
         Map<String, String> mapWhere = new HashMap<String, String>();
         mapWhere.put("EMAIL_CLIENT", email);
