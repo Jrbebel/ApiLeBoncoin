@@ -14,7 +14,7 @@
  * String[][] select(Connection, Table, tColonnes, mapWhere, mapOrderBy, String debut, String nombre)
  */
 package fr.jbb.dao;
-import java.io.PrintWriter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -76,16 +76,21 @@ public class DAOGeneriqueSimple {
         PreparedStatement pst;
         try {
             pst = pcnx.prepareStatement(lsbSQL.toString());
+            System.out.println("Requete insert : "+lsbSQL.toString());
             int i = 1;
             for (String valeurColonne : valeursColonnes) {
                 pst.setString(i, valeurColonne);
+                System.out.println("valeurColonne : " +valeurColonne);
                 i++;
             }
-
+            System.out.println("pst" + pst);
             liAffectes = pst.executeUpdate();
+            System.out.println("Ligne affecter" + liAffectes);
             pst.close();
+            
         } catch (SQLException e) {
-//            System.out.println("Erreur INSERT : " + e.getMessage());
+            
+            System.out.println("Erreur INSERT : " + e.getMessage());
         }
 
         return liAffectes;
@@ -351,7 +356,7 @@ public class DAOGeneriqueSimple {
         }
         lsbWhere.delete(lsbWhere.length() - 4, lsbWhere.length());
 
-//        System.out.println(lsbWhere);
+      System.out.println("La requete lsbWhere "+lsbWhere);
         return lsbWhere.toString();
     } /// getWhere
 

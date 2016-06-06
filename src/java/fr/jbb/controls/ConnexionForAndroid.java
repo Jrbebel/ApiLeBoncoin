@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONObject;
 
 /**
  *
@@ -26,37 +27,38 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ConnexionForAndroid", urlPatterns = {"/ConnexionApi"})
 public class ConnexionForAndroid extends HttpServlet {
 
+    PrintWriter out;
+    JSONObject json;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        response.setContentType("text/xml;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setContentType("application/json;charset=UTF-8");
+        out = response.getWriter();
+        json = new JSONObject(); //on crée un objet json
 
         Connection Cnx = Connexion.seConnecter();
-        String user = request.getParameter("pseudo");
+        String email = request.getParameter("email");
         String mdp = request.getParameter("mdp");
+
         String[] tColonnes = {"*"};
         String psTable = "CLIENT";
+
         Map<String, String> mapWhere = new HashMap<String, String>();
-        mapWhere.put("PSEUDO_CLIENT", user);
+        mapWhere.put("EMAIL_CLIENT", email);
         mapWhere.put("MDP_CLIENT", mdp);
+
         String[][] tData;
         tData = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, mapWhere, null, null, null);
+
         if (tData.length != 0) { //ON TRAITE SELON LES RESULTATS
-            out.print("<xml>"
-                    + "<reponse>"
-                    + "OK"
-                    + "</reponse>"
-                    + "</xml>");
+            json.put("Client", tData);
         } else {
-            out.print("<xml>"
-                    + "<reponse>"
-                    + "KO"
-                    + "</reponse>"
-                    + "</xml>");
+            json.put("Client", 0);
         }
+
+        out.print(json.toString());
         out.close();
 
     }
-
 }

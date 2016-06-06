@@ -25,7 +25,7 @@ import org.json.JSONObject;
  * @author jrbebel
  */
 @WebServlet(name = "ListeAnnonceOffre", urlPatterns = {"/ListeAnnonceOffre"})
-public class ListeAnnonceOffreForAndroid extends HttpServlet {
+public class ListeAnnonceForAndroid extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,7 +37,7 @@ public class ListeAnnonceOffreForAndroid extends HttpServlet {
 
             out = response.getWriter();
             json = new JSONObject(); //on crée un objet json
-
+            String typeAnnonce=request.getParameter("type");
             Connection Cnx = Connexion.seConnecter();
             if (Cnx == null) {
                 json.put("Erreur", "Probleme de connexion");
@@ -47,11 +47,10 @@ public class ListeAnnonceOffreForAndroid extends HttpServlet {
             String[] tColonnes = {"*"};
             String psTable = "produit,type_produit";
             String[][] TresultatListeOffre;
-
-            TresultatListeOffre = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, null, null, null, null); // on recupere tout les categories de produit
             Map<String, String> mapWhere = new HashMap<String, String>();
-            mapWhere.put("Produit_TypeProduit", "idType");
-            mapWhere.put("idType", "2");
+      
+            mapWhere.put("nomType",typeAnnonce);
+            TresultatListeOffre = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, mapWhere, null, null, null); // on recupere tout les categories de produit
 
             for (String[] strings : TresultatListeOffre) { //on parcours toute la liste des produit de type offre
 
