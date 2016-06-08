@@ -16,53 +16,64 @@ La liste des ressources disponible :
 
 **Connexion en méthode GET**
 
-    ConnexionApi?email=monemail@gmail.com&mdp=motdepasse
+    /ConnexionApi?email=monemail@gmail.com&mdp=motdepasse
 
- 	{   "Client": 	
-	[[
+ 	{   "Client": [
+		[
        "LUPIN",
        "ARSENE",
        "0690995524",
        "jeanraynal.bebel@gmail.com",
        "jrbebel"
-     ]]
+	     ]
+				]
 	 }
 
- - Inscription en mode GET
+**Inscription en mode GET**
  
- - Liste des régions en méthode GET
--  `apiLeBonCoin/RegionForAndroid`
+**Liste des régions en méthode GET**
 
-> {   "REGION": [
-> [
->   "2",
->   "75",
->   "Martinique",
->   "02"
-> ],
-> [
->   "3",
->   "75",
->   "Guyane",
->   "03"
-> ]]}
+	/RegionForAndroid
 
- - Liste des sous catégorie et de sous catégories en méthode GET
-	 - `apiLeBonCoin/CategorieSSCatForAndroid`
-> {   "VEHICULES": [
->     [
->       "2",
->       "2",
->       "Voitures"
->     ],
->     [
->       "3",
->       "2",
->       "Motos"
->     ],   "MATERIEL PROFESSIONNEL": [
->     [
->       "34",
->       "7",
->       "Matériel Agricole"
->     ]]}
+	 {   "REGION": [
+		 [
+   			"2",
+   			"75",
+   			"Martinique",
+  			"02"
+ 		],
+ 		[
+ 		    "3",
+   			"75",
+   			"Guyane",
+   			"03"
+		]
+					]
+	}
+
+**Liste des sous catégorie et de sous catégories en méthode GET**
+	
+	/CategorieSSCatForAndroid
+
+ 	{   "VEHICULES": [
+    	 [
+    	   "2",
+    	   "2",
+    	   "Voitures"
+   		],
+     	[
+       	   "3",
+       	   "2",
+       	   "Motos"
+ 	    ],   
+		
+		"MATERIEL PROFESSIONNEL": [
+     	[
+      	   "34",
+       	   "7",
+       	   "Matériel Agricole"
+        ]	
+						
+					]
+	}
 
