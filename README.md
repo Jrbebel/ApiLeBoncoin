@@ -12,20 +12,21 @@ L’échange de données se feront en XML et se feront sur le serveur http://ns3
 
 ----------
 
-
 La liste des ressources disponible : 
 
- - Connexion en méthode GET
-	 -  `ConnexionApi?email=monemail@gmail.com&mdp=motdepasse`
+**Connexion en méthode GET**
 
-> {   "Client": [
->     [
->       "LUPIN",
->       "ARSENE",
->       "0690995524",
->       "jeanraynal.bebel@gmail.com",
->       "jrbebel"
->     ]   ] }
+    ConnexionApi?email=monemail@gmail.com&mdp=motdepasse
+
+ 	{   "Client": 	
+	[[
+       "LUPIN",
+       "ARSENE",
+       "0690995524",
+       "jeanraynal.bebel@gmail.com",
+       "jrbebel"
+     ]]
+	 }
 
  - Inscription en mode GET
  
@@ -33,18 +34,18 @@ La liste des ressources disponible :
 -  `apiLeBonCoin/RegionForAndroid`
 
 > {   "REGION": [
->     [
->       "2",
->       "75",
->       "Martinique",
->       "02"
->     ],
->     [
->       "3",
->       "75",
->       "Guyane",
->       "03"
->     ]]}
+> [
+>   "2",
+>   "75",
+>   "Martinique",
+>   "02"
+> ],
+> [
+>   "3",
+>   "75",
+>   "Guyane",
+>   "03"
+> ]]}
 
  - Liste des sous catégorie et de sous catégories en méthode GET
 	 - `apiLeBonCoin/CategorieSSCatForAndroid`
