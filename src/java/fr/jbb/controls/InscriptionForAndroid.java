@@ -49,15 +49,15 @@ public class InscriptionForAndroid extends HttpServlet {
             }
             String psTable = "client"; //ma table d'insertion
 
-            String nomClient = "BEBEL";
-            String prenomClient = "Jean-raynal";
-            String telephoneClient = "06995524";
-            String emailClient = "jea@k.com";
-            String adresseClient = "bananier";
-            String pseudoClient = "jrbebel";
-            String mdpClient = "jrbebel";
-            String idVille = "1";
-            String idCategorieClient = "1";
+            String nomClient = request.getParameter("nom");
+            String prenomClient = request.getParameter("prenom");
+            String telephoneClient = request.getParameter("telephone");
+            String emailClient = request.getParameter("email");
+            String adresseClient = request.getParameter("adresse");
+            String pseudoClient = request.getParameter("pseudo");
+            String mdpClient =request.getParameter("mdp");
+            String idVille = request.getParameter("idVille");
+            String idCategorieClient = request.getParameter("idCategorie");
 
             Map<String, String> mapWhere = new HashMap<String, String>(); //ma map pour inserer les données
 

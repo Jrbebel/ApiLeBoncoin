@@ -38,8 +38,8 @@ public class Connexion {
             //  String asPort = "3306";
             String asBD = "leboncoin";
             String asUser = "root";
-             String asPassword = "hellsing003";
-             //String asPassword = "";
+        
+             String asPassword = "";
             // String lsURL="jdbc:mysql://172.17.0.2:3306/leboncoin";
             String lsURL = "jdbc:mysql://" + asServeur + ":" + asPort + "/" + asBD + "";
 
