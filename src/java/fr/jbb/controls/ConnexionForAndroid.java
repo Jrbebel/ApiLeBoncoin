@@ -41,15 +41,19 @@ public class ConnexionForAndroid extends HttpServlet {
         String email = request.getParameter("email");
         String mdp = request.getParameter("mdp");
 
-        String[] tColonnes = {"NOM_CLIENT,PRENOM_CLIENT,TELEPHONE_CLIENT,EMAIL_CLIENT,PSEUDO_CLIENT"};
-        String psTable = "client";
+        String[] tColonnes = {"NOM_CLIENT,PRENOM_CLIENT,TELEPHONE_CLIENT,EMAIL_CLIENT,PSEUDO_CLIENT,ADRESSE_CLIENT,MDP_CLIENT,NOM_VILLE"};
+        String psTable = "leboncoin.client,leboncoin.ville ";
 
         Map<String, String> mapWhere = new HashMap<String, String>();
-        mapWhere.put("EMAIL_CLIENT", email);
-        mapWhere.put("MDP_CLIENT", mdp);
+        mapWhere.put("EMAIL_CLIENT", "jeanraynal.bebel@gmail.com");
+        mapWhere.put("MDP_CLIENT", "a");
+        // mapWhere.put("leboncoin.client.ID_VILLE","leboncoin.ville.ID_VILLE");
+        Map<String, String> mapJoin = new HashMap<String, String>();
+        mapJoin.put("client.ID_VILLE","null");
+         mapJoin.put("ville.ID_VILLE","null");
 
         String[][] tData;
-        tData = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, mapWhere, null, null, null);
+        tData = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, mapWhere, mapJoin, null, null, null);
 
         if (tData.length != 0) { //ON TRAITE SELON LES RESULTATS
             json.put("Client", tData);

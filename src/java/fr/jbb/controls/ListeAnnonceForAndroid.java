@@ -50,7 +50,7 @@ public class ListeAnnonceForAndroid extends HttpServlet {
             Map<String, String> mapWhere = new HashMap<String, String>();
       
             mapWhere.put("nomType",typeAnnonce);
-            TresultatListeOffre = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, mapWhere, null, null, null); // on recupere tout les categories de produit
+            TresultatListeOffre = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, mapWhere,null, null, null, null); // on recupere tout les categories de produit
 
             for (String[] strings : TresultatListeOffre) { //on parcours toute la liste des produit de type offre
 

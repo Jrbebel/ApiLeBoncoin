@@ -51,12 +51,12 @@ public class CategorieSSCatForAndroid extends HttpServlet {
             String[][] TresultatCategorie;
             String[][] TresultatSsCategorie;
 
-            TresultatCategorie = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, null, null, null, null); // on recupere tout les categories de produit
+            TresultatCategorie = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, null, null, null, null, null); // on recupere tout les categories de produit
             Map<String, String> mapWhere = new HashMap<String, String>();
 
             for (String[] strings : TresultatCategorie) { //on parcours tout les categories de produit
                 mapWhere.put("ID_CATEGORIE_PRODUIT", strings[0]);
-                TresultatSsCategorie = DAOGeneriqueSimple.select(Cnx, psTableSsCat, tColonnes, mapWhere, null, null, null);// on récupere la sous categorie de la catégorie courante
+                TresultatSsCategorie = DAOGeneriqueSimple.select(Cnx, psTableSsCat, tColonnes, mapWhere, null, null, null, null);// on récupere la sous categorie de la catégorie courante
                 json.put(strings[1], TresultatSsCategorie); // on put la categorie à la sous categorie
 
             }

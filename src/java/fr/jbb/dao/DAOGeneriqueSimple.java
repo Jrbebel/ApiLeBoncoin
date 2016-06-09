@@ -4,14 +4,15 @@
  * Que des methodes statiques Et 4 methodes seulement :
  *
  * + les methodes privees getWhere, getOrderBy et getLimit
- * 
+ *
  * int insert(Connection, Table, mapInsert)
  *
  * int update(Connection, Table, mapSet , mapWhere)
  *
  * int delete(Connection, Table, mapWhere)
  *
- * String[][] select(Connection, Table, tColonnes, mapWhere, mapOrderBy, String debut, String nombre)
+ * String[][] select(Connection, Table, tColonnes, mapWhere, mapOrderBy, String
+ * debut, String nombre)
  */
 package fr.jbb.dao;
 
@@ -76,20 +77,20 @@ public class DAOGeneriqueSimple {
         PreparedStatement pst;
         try {
             pst = pcnx.prepareStatement(lsbSQL.toString());
-            System.out.println("Requete insert : "+lsbSQL.toString());
+            System.out.println("Requete insert : " + lsbSQL.toString());
             int i = 1;
             for (String valeurColonne : valeursColonnes) {
                 pst.setString(i, valeurColonne);
-                System.out.println("valeurColonne : " +valeurColonne);
+                System.out.println("valeurColonne : " + valeurColonne);
                 i++;
             }
             System.out.println("pst" + pst);
             liAffectes = pst.executeUpdate();
             System.out.println("Ligne affecter" + liAffectes);
             pst.close();
-            
+
         } catch (SQLException e) {
-            
+
             System.out.println("Erreur INSERT : " + e.getMessage());
         }
 
@@ -222,12 +223,13 @@ public class DAOGeneriqueSimple {
      * @param psTable
      * @param tColonnes
      * @param mapWhere
+     * @param mapJoin
      * @param mapOrderBy
      * @param debut
      * @param nombre
      * @return
      */
-    public static String[][] select(Connection pcnx, String psTable, String[] tColonnes, Map<String, String> mapWhere, Map<String, String> mapOrderBy, String debut, String nombre) {
+    public static String[][] select(Connection pcnx, String psTable, String[] tColonnes, Map<String, String> mapWhere, Map<String, String> mapJoin, Map<String, String> mapOrderBy, String debut, String nombre) {
         String[][] tData;
         PreparedStatement pst;
         ResultSet lrs;
@@ -240,9 +242,12 @@ public class DAOGeneriqueSimple {
         String lsValeur;
         String lsColonnes = "*";
         String lsWHERE = "";
+        String lsJOIN = "";
         String lsORDERBY = "";
         String lsLIMIT = "";
         Set<String> nomsColonnesWhere;
+        Set<String> nomsColonnesJOIN;
+
         Collection<String> valeursColonnes;
 
         try {
@@ -260,6 +265,11 @@ public class DAOGeneriqueSimple {
                 nomsColonnesWhere = mapWhere.keySet();
                 lsWHERE = getWhere(nomsColonnesWhere);
             }
+            if (mapJoin != null) {
+                nomsColonnesJOIN = mapJoin.keySet();
+                System.out.println("en premier lieu " + nomsColonnesJOIN);
+                lsJOIN = getJOIN(nomsColonnesJOIN);
+            }
             if (mapOrderBy != null) {
                 lsORDERBY = getOrderBy(mapOrderBy);
             }
@@ -273,11 +283,11 @@ public class DAOGeneriqueSimple {
             lsbSQL.append(" FROM ");
             lsbSQL.append(psTable);
             lsbSQL.append(lsWHERE);
+            lsbSQL.append(lsJOIN);
             lsbSQL.append(lsORDERBY);
             lsbSQL.append(lsLIMIT);
 
             pst = pcnx.prepareStatement(lsbSQL.toString());
-           
 
             System.out.println(lsbSQL);
             if (mapWhere != null) {
@@ -285,6 +295,7 @@ public class DAOGeneriqueSimple {
                 int i = 1;
                 for (String lsValeurColonne : valeursColonnes) {
                     pst.setString(i, lsValeurColonne);
+                    System.out.println("lsvaleur " + lsValeurColonne);
                     i++;
                 }
             }
@@ -328,15 +339,14 @@ public class DAOGeneriqueSimple {
 //            System.out.println("Taille de tData : " + tData.length);
 
         } catch (SQLException e) {
-         
 
 //            System.out.println("Erreur SELECT : " + e.getMessage());
             tData = new String[1][1];
             tData[0][0] = e.getMessage();
         }
-    
+
         return tData;
-        
+
     } /// select
 
     /**
@@ -356,9 +366,31 @@ public class DAOGeneriqueSimple {
         }
         lsbWhere.delete(lsbWhere.length() - 4, lsbWhere.length());
 
-      System.out.println("La requete lsbWhere "+lsbWhere);
+        System.out.println("La requete lsbWhere " + lsbWhere);
         return lsbWhere.toString();
     } /// getWhere
+
+    /**
+     *
+     * @param mapWhere
+     * @return
+     */
+    private static String getJOIN(Set<String> nomsColonnes) {
+        /*
+         du genre WHERE cp=? AND insee=?
+         */
+        StringBuilder lsbJOIN = new StringBuilder(" AND ");
+
+        for (String nomColonne : nomsColonnes) {
+            System.out.println("nomColonne " + nomColonne);
+            lsbJOIN.append(nomColonne);
+            lsbJOIN.append("= ");
+        }
+        lsbJOIN.delete(lsbJOIN.length() - 2, lsbJOIN.length());
+
+        System.out.println("La requete lsbjoin " + lsbJOIN);
+        return lsbJOIN.toString();
+    } /// getJOIN
 
     /**
      *

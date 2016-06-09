@@ -57,7 +57,7 @@ public class RegionForAndroid extends HttpServlet {
             String[] tColonnes = {"*"};
             String psTable = "region";
             String[][] tData;
-            tData = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, null, null, "1", "30");
+            tData = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes,null,null, null, "1", "30");
             json.put("REGION", tData);
             out.print(json.toString());
             out.close();
