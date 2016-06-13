@@ -37,7 +37,7 @@ public class ListeAnnonceForAndroid extends HttpServlet {
 
             out = response.getWriter();
             json = new JSONObject(); //on crée un objet json
-            String typeAnnonce=request.getParameter("type");
+            String typeAnnonce = request.getParameter("type");
             Connection Cnx = Connexion.seConnecter();
             if (Cnx == null) {
                 json.put("Erreur", "Probleme de connexion");
@@ -47,14 +47,18 @@ public class ListeAnnonceForAndroid extends HttpServlet {
             String[] tColonnes = {"*"};
             String psTable = "produit,type_produit";
             String[][] TresultatListeOffre;
+
             Map<String, String> mapWhere = new HashMap<String, String>();
-      
-            mapWhere.put("nomType",typeAnnonce);
-            TresultatListeOffre = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, mapWhere,null, null, null, null); // on recupere tout les categories de produit
+            mapWhere.put("nomType", typeAnnonce);
+
+            Map<String, String> mapJoin = new HashMap<String, String>();
+            mapJoin.put("produit.Produit_TypeProduit", "type_produit.idType");
+
+            TresultatListeOffre = DAOGeneriqueSimple.select(Cnx, psTable, tColonnes, mapWhere, mapJoin, null, "1", "20"); // on recupere tout les categories de produit
 
             for (String[] strings : TresultatListeOffre) { //on parcours toute la liste des produit de type offre
 
-                json.put("listeAnnonceOffre", TresultatListeOffre); // on put la liste des annonces
+                json.put("listeAnnonce", TresultatListeOffre); // on put la liste des annonces
 
             }
 
