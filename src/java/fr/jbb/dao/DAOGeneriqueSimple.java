@@ -268,7 +268,7 @@ public class DAOGeneriqueSimple {
             if (mapJoin != null) {
                 nomsColonnesJOIN = mapJoin.keySet();
                 System.out.println("en premier lieu " + nomsColonnesJOIN);
-                lsJOIN = getJOIN(nomsColonnesJOIN);
+                lsJOIN = getJOIN(mapJoin);
             }
             if (mapOrderBy != null) {
                 lsORDERBY = getOrderBy(mapOrderBy);
@@ -349,6 +349,125 @@ public class DAOGeneriqueSimple {
 
     } /// select
 
+    public static String[][] selectLike(Connection pcnx, String psTable, String[] tColonnes, Map<String, String> mapWhere, Map<String, String> mapJoin, Map<String, String> mapOrderBy, String debut, String nombre) {
+        String[][] tData;
+        PreparedStatement pst;
+        ResultSet lrs;
+        ResultSetMetaData lrsmd;
+        int liCols;
+        String[] tValeursColonnes;
+        List<String[]> listeLignes;
+        StringBuilder lsbSQL = new StringBuilder();
+        StringBuilder lsbColonnes = new StringBuilder();
+        String lsValeur;
+        String lsColonnes = "*";
+        String lsWHERE = "";
+        String lsJOIN = "";
+        String lsORDERBY = "";
+        String lsLIMIT = "";
+        Set<String> nomsColonnesWhere;
+        Set<String> nomsColonnesJOIN;
+
+        Collection<String> valeursColonnes;
+
+        try {
+
+            if (tColonnes != null) {
+                for (String lsNomColonne : tColonnes) {
+                    lsbColonnes.append(lsNomColonne);
+                    lsbColonnes.append(",");
+                }
+                lsbColonnes.deleteCharAt(lsbColonnes.length() - 1);
+                lsColonnes = lsbColonnes.toString();
+            }
+
+            if (mapWhere != null) {
+                nomsColonnesWhere = mapWhere.keySet();
+                lsWHERE = getWhereLike(mapWhere);
+            }
+            if (mapJoin != null) {
+                nomsColonnesJOIN = mapJoin.keySet();
+                System.out.println("en premier lieu " + nomsColonnesJOIN);
+                lsJOIN = getJOIN(mapJoin);
+            }
+            if (mapOrderBy != null) {
+                lsORDERBY = getOrderBy(mapOrderBy);
+            }
+            if (debut != null) {
+                lsLIMIT = getLimit(debut, nombre);
+            }
+
+            //lsSelect = "SELECT " + lsColonnes + " FROM " + psTable + lsWHERE;
+            lsbSQL.append("SELECT ");
+            lsbSQL.append(lsColonnes);
+            lsbSQL.append(" FROM ");
+            lsbSQL.append(psTable);
+            lsbSQL.append(lsWHERE);
+            lsbSQL.append(lsJOIN);
+            lsbSQL.append(lsORDERBY);
+            lsbSQL.append(lsLIMIT);
+            System.out.println("reqiete" + lsbSQL);
+            pst = pcnx.prepareStatement(lsbSQL.toString());
+
+            System.out.println("reqiete" + lsbSQL);
+            if (mapWhere != null) {
+                valeursColonnes = mapWhere.values();
+                int i = 1;
+                for (String lsValeurColonne : valeursColonnes) {
+                    pst.setString(i, lsValeurColonne);
+                    System.out.println("lsvaleur " + lsValeurColonne);
+                    i++;
+                }
+            }
+
+            if (mapOrderBy != null) {
+                lsbSQL.append(getOrderBy(mapOrderBy));
+            }
+
+            if (debut != null) {
+                lsbSQL.append(getLimit(debut, nombre));
+            }
+
+            lrs = pst.executeQuery();
+            lrsmd = lrs.getMetaData();
+            liCols = lrsmd.getColumnCount();
+
+            // --- Affichage du contenu des lignes/colonnes
+            listeLignes = new ArrayList();
+            while (lrs.next()) {
+                tValeursColonnes = new String[liCols];
+                for (int i = 1; i <= liCols; i++) {
+                    lsValeur = lrs.getString(i);
+                    if (lsValeur == null) {
+                        tValeursColonnes[i - 1] = "NUL";
+                    } else {
+                        tValeursColonnes[i - 1] = lsValeur.toString();
+                    }
+                }
+//                System.out.println("Taille de tColonnes : " + tValeursColonnes.length);
+                listeLignes.add(tValeursColonnes);
+            }
+
+            lrs.close();
+            pst.close();
+
+            //tData = listeLignes.toArray(new String[listeLignes.size()]);
+            tData = new String[listeLignes.size()][liCols];
+            for (int i = 0; i < tData.length; i++) {
+                tData[i] = listeLignes.get(i);
+            }
+//            System.out.println("Taille de tData : " + tData.length);
+
+        } catch (SQLException e) {
+
+//            System.out.println("Erreur SELECT : " + e.getMessage());
+            tData = new String[1][1];
+            tData[0][0] = e.getMessage();
+        }
+
+        return tData;
+    }
+
     /**
      *
      * @param mapWhere
@@ -370,24 +489,39 @@ public class DAOGeneriqueSimple {
         return lsbWhere.toString();
     } /// getWhere
 
+    private static String getWhereLike(Map<String, String> map) {
+        /*
+         du genre WHERE cp=? AND insee=?
+         */
+        StringBuilder lsbWhere = new StringBuilder("WHERE ");
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            lsbWhere.append(key);
+            lsbWhere.append(" LIKE ? ");
+        }
+
+        System.out.println("La requete lsbWhere " + lsbWhere);
+        return lsbWhere.toString();
+    } /// getWhere
+
     /**
      *
      * @param mapWhere
      * @return
      */
-    private static String getJOIN(Set<String> nomsColonnes) {
+    private static String getJOIN(Map<String, String> nomsColonnes) {
         /*
          du genre WHERE cp=? AND insee=?
          */
         StringBuilder lsbJOIN = new StringBuilder(" AND ");
-
-        for (String nomColonne : nomsColonnes) {
-            System.out.println("nomColonne " + nomColonne);
-            lsbJOIN.append(nomColonne);
-            lsbJOIN.append("= ");
+        for (Map.Entry<String, String> entry : nomsColonnes.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            lsbJOIN.append(key + "= " + value + " AND ");
         }
-        lsbJOIN.delete(lsbJOIN.length() - 2, lsbJOIN.length());
 
+        lsbJOIN.delete(lsbJOIN.length() - 4, lsbJOIN.length());
         System.out.println("La requete lsbjoin " + lsbJOIN);
         return lsbJOIN.toString();
     } /// getJOIN

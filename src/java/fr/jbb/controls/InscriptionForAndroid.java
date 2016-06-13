@@ -10,6 +10,9 @@ import fr.jbb.dao.DAOGeneriqueSimple;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -34,7 +37,7 @@ public class InscriptionForAndroid extends HttpServlet {
     int resultat;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         response.setContentType("application/json;charset=UTF-8"); // on specifie que notre response sera de type json
         try {
@@ -48,31 +51,50 @@ public class InscriptionForAndroid extends HttpServlet {
                 out.print(json.toString());
             }
             String psTable = "client"; //ma table d'insertion
-
+            String idClient = request.getParameter("idclient");
             String nomClient = request.getParameter("nom");
             String prenomClient = request.getParameter("prenom");
             String telephoneClient = request.getParameter("telephone");
             String emailClient = request.getParameter("email");
             String adresseClient = request.getParameter("adresse");
             String pseudoClient = request.getParameter("pseudo");
-            String mdpClient =request.getParameter("mdp");
+            String mdpClient = request.getParameter("mdp");
+            String dateString = request.getParameter("date");
             String idVille = request.getParameter("idVille");
             String idCategorieClient = request.getParameter("idCategorie");
 
-            Map<String, String> mapWhere = new HashMap<String, String>(); //ma map pour inserer les données
+            Map<String, String> mapColonne = new HashMap<String, String>(); //ma map pour inserer les données
 
-            mapWhere.put("NOM_CLIENT", nomClient);
-            mapWhere.put("PRENOM_CLIENT", prenomClient);
-            mapWhere.put("TELEPHONE_CLIENT", telephoneClient);
-            mapWhere.put("EMAIL_CLIENT", emailClient);
-            mapWhere.put("ADRESSE_CLIENT", adresseClient);
-            mapWhere.put("PSEUDO_CLIENT", pseudoClient);
-            mapWhere.put("MDP_CLIENT", mdpClient);
-            mapWhere.put("ID_VILLE", idVille);
-            mapWhere.put("ID_CATEGORIE_CLIENT", idCategorieClient);
+            mapColonne.put("NOM_CLIENT", nomClient);
+            mapColonne.put("PRENOM_CLIENT", prenomClient);
+            mapColonne.put("TELEPHONE_CLIENT", telephoneClient);
+            mapColonne.put("EMAIL_CLIENT", emailClient);
+            mapColonne.put("ADRESSE_CLIENT", adresseClient);
+            mapColonne.put("PSEUDO_CLIENT", pseudoClient);
+            mapColonne.put("MDP_CLIENT", mdpClient);
+            mapColonne.put("DATENAISS_CLIENT", dateString);
+            mapColonne.put("ID_VILLE", idVille);
+            mapColonne.put("ID_CATEGORIE_CLIENT", idCategorieClient);
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = formatter.parse(dateString);
+                System.out.println(date);
+                System.out.println(formatter.format(date));
 
-            resultat = DAOGeneriqueSimple.insert(Cnx, psTable, mapWhere);
+            } catch (ParseException e) {
 
+                e.printStackTrace();
+            }
+
+            if (idClient.equals(null)) { //si c'est null c'est que c'est une inscription sinon c une modification de profil
+
+                resultat = DAOGeneriqueSimple.insert(Cnx, psTable, mapColonne);
+
+            } else {
+                 Map<String, String> mapUpdate= new HashMap<String, String>();
+                mapUpdate.put("ID_CLIENT", idClient);
+                resultat = DAOGeneriqueSimple.update(Cnx, psTable, mapColonne, mapUpdate);
+            }
             if (resultat == 1) {
 
                 Connexion.valider();
@@ -83,7 +105,7 @@ public class InscriptionForAndroid extends HttpServlet {
 
                 Connexion.annuler();
                 Connexion.seDeconnecter();
-                json.put("retour", "erreur d'insertion");
+                json.put("retour", "Erreur Requete");
 
             }
             out.print(json.toString());
