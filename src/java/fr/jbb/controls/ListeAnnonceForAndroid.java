@@ -44,7 +44,7 @@ public class ListeAnnonceForAndroid extends HttpServlet {
                 out.print(json.toString());
             }
 
-            String[] tColonnes = {"*"};
+            String[] tColonnes = {"ID_PRODUIT,PATHIMAGE,DESIGNATION_PRODUIT,PRIX_PRODUIT,Produit_TypeProduit"};
             String psTable = "produit,type_produit";
             String[][] TresultatListeOffre;
 
