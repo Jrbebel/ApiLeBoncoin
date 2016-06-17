@@ -7,7 +7,7 @@ Ceci est une api qui a été développé au cours de ma formation à M2I dans le
 
 
 ApiLeBonCoin est une api qui permettra à notre Application d'android de communiquer avec la base de données et de récupérer les informations qui lui est nécessaire .
-L’échange de données se feront en XML et se feront sur le serveur http://ns320828.ip-5-39-86.eu/apiLeBonCoin/.
+L’échange de données se feront en JSON et se feront sur le serveur http://ns320828.ip-5-39-86.eu/apiLeBonCoin/.
 
 
 ----------
