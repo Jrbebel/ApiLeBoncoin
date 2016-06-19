@@ -40,7 +40,7 @@ public class ConnexionForAndroid extends HttpServlet {
         Connection Cnx = Connexion.seConnecter();
         String email = request.getParameter("email");
         String mdp = request.getParameter("mdp");
-        int[] tDataNoresult = {0};
+       
         String[] tColonnes = {"CATEGORIE_CLIENT,ID_CLIENT,NOM_CLIENT,PRENOM_CLIENT,TELEPHONE_CLIENT,DATENAISS_CLIENT,EMAIL_CLIENT,PSEUDO_CLIENT,MDP_CLIENT,ADRESSE_CLIENT,ville.ID_VILLE,NOM_VILLE,NOM_REGION,CP_VILLE"};
         String psTable = "leboncoin.client,leboncoin.ville,leboncoin.categorie_client,leboncoin.region,leboncoin.departement";
 
@@ -60,7 +60,7 @@ public class ConnexionForAndroid extends HttpServlet {
         if (tData.length != 0) { //ON TRAITE SELON LES RESULTATS
             json.put("Client", tData);
         } else {
-            json.put("Client", tDataNoresult);
+            json.put("Client", false);
         }
 
         out.print(json.toString());
